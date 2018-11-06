@@ -1,6 +1,6 @@
 {
-  "name": "vodr.react",
-  "version": "0.1.0",
+  "name": "template",
+  "version": "0.0.1",
   "private": true,
   "dependencies": {
     "@reach/router": "^1.2.1",
@@ -19,14 +19,18 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development SKIP_PREFLIGHT_CHECK=true craco start",
     "build": "cross-env NODE_ENV=production SKIP_PREFLIGHT_CHECK=true craco build",
+    "generate-sw": "cross-env NODE_ENV=production sw-precache --root=build --config scripts/sw-precache-config.js && uglifyjs build/service-worker.js -o build/service-worker.js",
     "test": "cross-env NODE_ENV=test SKIP_PREFLIGHT_CHECK=true craco test",
     "eject": "craco eject",
     "postinstall": "patch-package",
-    "postbuild": "cross-env NODE_ENV=production react-snap"
+    "postbuild": "cross-env NODE_ENV=production react-snap && npm run generate-sw"
   },
   "reactSnap": {
     "inlineCss": true,
     "asyncScriptTags": true,
+    "include": [
+      "/200.html"
+    ],
     "minifyHtml": {
       "sortClassName": false
     }
@@ -150,7 +154,9 @@
     "sass-loader": "^7.1.0",
     "stylelint": "^9.7.1",
     "stylelint-config-standard": "^18.2.0",
+    "sw-precache": "^5.2.1",
     "tailwindcss": "^0.7.2",
-    "typescript-eslint-parser": "^20.1.1"
+    "typescript-eslint-parser": "^20.1.1",
+    "uglifyjs": "^2.4.11"
   }
 }
