@@ -7,24 +7,139 @@
     "@types/node": "10.12.2",
     "@types/react": "16.4.18",
     "@types/react-dom": "16.0.9",
-    "react": "^16.6.0",
-    "react-dom": "^16.6.0",
+    "react": "^16.7.0-alpha.0",
+    "react-delay": "^0.1.0",
+    "react-dom": "^16.7.0-alpha.0",
+    "react-hot-loader": "^4.3.12",
     "react-scripts": "2.1.1",
     "typescript": "3.1.6"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "cross-env NODE_ENV=development SKIP_PREFLIGHT_CHECK=true craco start",
+    "build": "cross-env NODE_ENV=production SKIP_PREFLIGHT_CHECK=true craco build",
+    "test": "cross-env NODE_ENV=test SKIP_PREFLIGHT_CHECK=true craco test",
+    "eject": "craco eject",
+    "postinstall": "patch-package",
+    "postbuild": "cross-env NODE_ENV=production react-snap"
+  },
+  "reactSnap": {
+    "inlineCss": true,
+    "asyncScriptTags": true,
+    "minifyHtml": {
+      "sortClassName": false
+    }
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "plugin:jsx-a11y/recommended",
+      "airbnb"
+    ],
+    "plugins": [
+      "jsx-a11y"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "**/*.ts",
+          "**/*.tsx"
+        ],
+        "parser": "typescript-eslint-parser",
+        "parserOptions": {
+          "ecmaFeatures": {
+            "jsx": true
+          }
+        },
+        "rules": {
+          "no-undef": "off",
+          "no-unused-vars": "off",
+          "import/prefer-default-export": "off",
+          "react/prop-types": "off"
+        }
+      },
+      {
+        "files": [
+          "**/*.d.ts"
+        ],
+        "rules": {
+          "import/export": "off"
+        }
+      }
+    ],
+    "settings": {
+      "import/resolver": {
+        "alias": {
+          "map": [
+            [
+              "~",
+              "./src"
+            ]
+          ],
+          "extensions": [
+            ".js",
+            ".jsx",
+            ".ts",
+            ".tsx",
+            ".json"
+          ]
+        }
+      }
+    },
+    "rules": {
+      "semi": [
+        "error",
+        "never"
+      ],
+      "spaced-comment": [
+        "error",
+        "always",
+        {
+          "markers": [
+            "/"
+          ]
+        }
+      ],
+      "react/jsx-one-expression-per-line": 0,
+      "react/jsx-filename-extension": [
+        "error",
+        {
+          "extensions": [
+            ".jsx",
+            ".tsx"
+          ]
+        }
+      ],
+      "import/no-extraneous-dependencies": [
+        "error",
+        {
+          "devDependencies": [
+            "**/*.test.jsx",
+            "**/test.jsx",
+            "**/*.test.tsx",
+            "**/test.tsx",
+            "**/*.config.js",
+            "**/stories.jsx"
+          ]
+        }
+      ]
+    }
   },
   "browserslist": [
     ">0.2%",
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "@craco/craco": "^2.0.2",
+    "cross-env": "^5.2.0",
+    "eslint": "^5.8.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-import-resolver-alias": "^1.1.1",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.11.1",
+    "react-snap": "^1.19.0",
+    "typescript-eslint-parser": "^20.1.1"
+  }
 }

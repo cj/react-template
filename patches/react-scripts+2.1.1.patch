@@ -1,0 +1,20 @@
+patch-package
+--- c/node_modules/react-scripts/scripts/utils/verifyTypeScriptSetup.js
++++ i/node_modules/react-scripts/scripts/utils/verifyTypeScriptSetup.js
+@@ -122,11 +122,11 @@ function verifyTypeScriptSetup() {
+     },
+     // We do not support absolute imports, though this may come as a future
+     // enhancement
+-    baseUrl: {
+-      value: undefined,
+-      reason: 'absolute imports are not supported (yet)',
+-    },
+-    paths: { value: undefined, reason: 'aliased imports are not supported' },
++    // baseUrl: {
++    //   value: undefined,
++    //   reason: 'absolute imports are not supported (yet)',
++    // },
++    // paths: { value: undefined, reason: 'aliased imports are not supported' },
+   };
+ 
+   const formatDiagnosticHost = {

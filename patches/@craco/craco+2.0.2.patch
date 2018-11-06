@@ -1,0 +1,12 @@
+patch-package
+--- c/node_modules/@craco/craco/lib/features/test/jest.js
++++ i/node_modules/@craco/craco/lib/features/test/jest.js
+@@ -8,7 +8,7 @@ const { getJestBabelConfig } = require("./jest-config-utils");
+ const { applyJestConfigPlugins } = require("../plugins");
+ const { nodeModulesPath } = require("../../paths");
+ 
+-const BABEL_TRANSFORM_ENTRY_KEY = "^.+\\.(js|jsx)$";
++const BABEL_TRANSFORM_ENTRY_KEY = "^.+\\.(js|jsx|ts|tsx)$";
+ 
+ function configureBabel(jestConfig, cracoConfig) {
+     const { addPresets, addPlugins } = getJestBabelConfig(cracoConfig.jest);
