@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@reach/router": "^1.2.1",
     "@types/jest": "23.3.9",
     "@types/node": "10.12.2",
     "@types/react": "16.4.18",
@@ -12,6 +13,7 @@
     "react-dom": "^16.7.0-alpha.0",
     "react-hot-loader": "^4.3.12",
     "react-scripts": "2.1.1",
+    "styled-jsx": "^3.1.0",
     "typescript": "3.1.6"
   },
   "scripts": {
@@ -53,6 +55,7 @@
         "rules": {
           "no-undef": "off",
           "no-unused-vars": "off",
+          "react/jsx-closing-tag-location": "off",
           "import/prefer-default-export": "off",
           "react/prop-types": "off"
         }
@@ -132,6 +135,9 @@
   ],
   "devDependencies": {
     "@craco/craco": "^2.0.2",
+    "@fullhuman/postcss-purgecss": "^1.1.0",
+    "@types/reach__router": "^1.2.2",
+    "@types/styled-jsx": "^2.2.7",
     "cross-env": "^5.2.0",
     "eslint": "^5.8.0",
     "eslint-config-airbnb": "^17.1.0",
@@ -139,7 +145,12 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-react": "^7.11.1",
+    "node-sass": "^4.10.0",
     "react-snap": "^1.19.0",
+    "sass-loader": "^7.1.0",
+    "stylelint": "^9.7.1",
+    "stylelint-config-standard": "^18.2.0",
+    "tailwindcss": "^0.7.2",
     "typescript-eslint-parser": "^20.1.1"
   }
 }

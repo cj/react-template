@@ -1,0 +1,11 @@
+@import './scss/minireset';
+@import './scss/tailwind';
+
+html,
+body,
+#app {
+  overflow: auto;
+  overflow-x: hidden;
+  height: 100%;
+  @apply font-sans;
+}

@@ -1,0 +1,25 @@
+{
+  "extends": "stylelint-config-recommended",
+  "ignoreFiles": [
+    "dist/**/*",
+    "build/**/*"
+  ],
+  "rules": {
+    "string-quotes": "single",
+    "at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": [
+          "function",
+          "if",
+          "each",
+          "include",
+          "mixin",
+          "return",
+          "tailwind",
+          "responsive"
+        ]
+      }
+    ]
+  }
+}

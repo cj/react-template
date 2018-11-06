@@ -1,9 +1,14 @@
 const path = require('path')
-const { paths } = require('@craco/craco')
+const { paths, POSTCSS_MODES } = require('@craco/craco')
 
 const srcDir = path.resolve(__dirname, `${paths.appSrc}/`)
 
 module.exports = {
+  style: {
+    postcss: {
+      mode: POSTCSS_MODES.file,
+    },
+  },
   webpack: {
     alias: {
       '~': srcDir,
@@ -19,6 +24,9 @@ module.exports = {
   },
 
   babel: {
-    plugins: ['react-hot-loader/babel'],
+    plugins: [
+      'react-hot-loader/babel',
+      'styled-jsx/babel',
+    ],
   },
 }

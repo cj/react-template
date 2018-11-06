@@ -2,7 +2,7 @@ import React, { lazy, Suspense } from 'react'
 import { hot } from 'react-hot-loader'
 import Loading from '../Loading'
 
-const Home = lazy(() => import('../Home'))
+const Home = lazy(() => import('~/routes/Home'))
 
 const App = () => (
   <div className="App">
