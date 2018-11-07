@@ -1,7 +1,7 @@
 .Header {
   background-color: #282c34;
 
-  @apply flex flex-col items-center justify-center min-h-screen;
+  @apply flex flex-col items-center justify-center h-full p-5;
   @apply text-center text-white text-xl;
 
   p {

@@ -3,7 +3,9 @@
 
 html,
 body,
-#root {
+#root,
+.App,
+.App > div {
   overflow: auto;
   overflow-x: hidden;
   height: 100%;

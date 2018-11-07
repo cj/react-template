@@ -8,9 +8,7 @@ import Router from '../Router'
 
 const App = () => (
   <div className="App">
-    <Suspense maxDuration={3000} fallback={<Loading />}>
-      <Router />
-    </Suspense>
+    <Router />
   </div>
 )
 

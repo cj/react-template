@@ -5,7 +5,7 @@
     "skipLibCheck": false,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "noUnusedParameters": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
