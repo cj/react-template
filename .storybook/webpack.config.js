@@ -2,11 +2,11 @@ const {
   craPaths,
   loadWebpackDevConfig,
   overrideWebpackDevConfig,
-  start,
 } = require('@craco/craco/lib/cra')
 const { loadCracoConfig } = require('@craco/craco/lib/config')
 const { overrideWebpack } = require('@craco/craco/lib/features/webpack')
 const { overrideDevServer } = require('@craco/craco/lib/features/dev-server')
+const TSDocgenPlugin = require('react-docgen-typescript-webpack-plugin')
 
 const context = {
   env: process.env.NODE_ENV,
@@ -19,8 +19,7 @@ const config = loadWebpackDevConfig()
 overrideWebpack(cracoConfig, config, overrideWebpackDevConfig, context)
 overrideDevServer(cracoConfig, context)
 
-module.exports = ({ entry, output, plugins }, env, storybookConfig) => {
-  const TSDocgenPlugin = require('react-docgen-typescript-webpack-plugin')
+module.exports = ({ entry, output, plugins }) => {
   const {
     module: { rules },
   } = config
