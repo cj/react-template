@@ -22,12 +22,4 @@ module.exports = {
       },
     },
   },
-
-  babel: {
-    plugins: [
-      // FIXME: https://github.com/gaearon/react-hot-loader/issues/1088#issuecomment-433537974
-      // 'react-hot-loader/babel',
-      'styled-jsx/babel',
-    ],
-  },
 }

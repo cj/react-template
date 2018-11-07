@@ -10,7 +10,6 @@
     "react-dom": "^16.7.0-alpha.0",
     "react-hot-loader": "^4.3.12",
     "react-scripts": "2.1.1",
-    "styled-jsx": "^3.1.0",
     "typescript": "3.1.6"
   },
   "scripts": {
@@ -20,7 +19,9 @@
     "test": "cross-env NODE_ENV=test SKIP_PREFLIGHT_CHECK=true craco test",
     "eject": "craco eject",
     "postinstall": "patch-package",
-    "postbuild": "cross-env NODE_ENV=production react-snap && npm run generate-sw"
+    "postbuild": "cross-env NODE_ENV=production react-snap && npm run generate-sw",
+    "storybook": "start-storybook -p 9009 -s public --ci",
+    "build-storybook": "build-storybook -s public"
   },
   "reactSnap": {
     "inlineCss": true,
@@ -42,6 +43,22 @@
       "jsx-a11y"
     ],
     "overrides": [
+      {
+        "files": [
+          "src/stories/**",
+          "**/*.stories.js",
+          "**/*.stories.jsx",
+          "**/*.stories.ts",
+          "**/*.stories.tsx",
+          "**/stories.js",
+          "**/stories.jsx",
+          "**/stories.ts",
+          "**/stories.tsx"
+        ],
+        "rules": {
+          "import/no-extraneous-dependencies": "off"
+        }
+      },
       {
         "files": [
           "**/*.ts",
@@ -94,6 +111,14 @@
         "error",
         "never"
       ],
+      "no-underscore-dangle": [
+        "error",
+        {
+          "allow": [
+            "__docgenInfo"
+          ]
+        }
+      ],
       "spaced-comment": [
         "error",
         "always",
@@ -135,16 +160,29 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@babel/core": "^7.1.5",
     "@craco/craco": "^2.0.2",
     "@fullhuman/postcss-purgecss": "^1.1.0",
+    "@storybook/addon-actions": "^4.0.4",
+    "@storybook/addon-info": "^4.0.4",
+    "@storybook/addon-links": "^4.0.4",
+    "@storybook/addon-options": "^4.0.4",
+    "@storybook/addon-storysource": "^4.0.4",
+    "@storybook/addons": "^4.0.4",
+    "@storybook/cli": "^4.0.4",
+    "@storybook/react": "^4.0.4",
     "@types/jest": "23.3.9",
-    "@types/node": "10.12.2",
+    "@types/node": "10.12.3",
     "@types/nprogress": "0.0.29",
     "@types/reach__router": "^1.2.2",
     "@types/react": "16.4.18",
     "@types/react-dom": "16.0.9",
     "@types/react-hot-loader": "^4.1.0",
-    "@types/styled-jsx": "^2.2.7",
+    "@types/storybook__addon-actions": "^3.4.1",
+    "@types/storybook__addon-links": "^3.3.2",
+    "@types/storybook__react": "^4.0.0",
+    "awesome-typescript-loader": "^5.2.1",
+    "babel-loader": "^8.0.4",
     "cross-env": "^5.2.0",
     "eslint": "^5.8.0",
     "eslint-config-airbnb": "^17.1.0",
@@ -153,6 +191,8 @@
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-react": "^7.11.1",
     "node-sass": "^4.10.0",
+    "patch-package": "^5.1.1",
+    "react-docgen-typescript-webpack-plugin": "^1.1.0",
     "react-snap": "^1.19.0",
     "sass-loader": "^7.1.0",
     "stylelint": "^9.7.1",
