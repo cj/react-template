@@ -14,8 +14,9 @@ tags*
 !.stylelintrc*
 !.eslintrc*
 !.eslintignore
-!.postcssrc
+!.postcssrc*
+!.prettierrc*
 !.editorconfig
 !.storybook
-!.babelrc
+!.babelrc*
 !.prerender-spa.json
