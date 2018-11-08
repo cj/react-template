@@ -44,6 +44,7 @@ module.exports = {
   ],
   settings: {
     'import/resolver': {
+      typescript: {},
       alias: {
         map: [['~', './src']],
         extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
@@ -52,6 +53,7 @@ module.exports = {
   },
   rules: {
     semi: ['error', 'never'],
+    'no-shadow': ['error', { allow: ['React'] }],
     'no-underscore-dangle': [
       'error',
       {

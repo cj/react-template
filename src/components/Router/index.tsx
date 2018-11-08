@@ -3,6 +3,7 @@ import { Router as ReachRouter } from '@reach/router'
 import Loading from '../Loading'
 
 const Home = lazy(() => import('~/routes/Home'))
+const Foo = lazy(() => import('~/routes/Foo'))
 
 const Router = () => (
   <Suspense maxDuration={3000} fallback={<Loading />}>

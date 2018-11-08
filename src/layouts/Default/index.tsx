@@ -2,6 +2,9 @@ import React from 'react'
 
 const DefaultLayout: React.SFC<{
   children: React.ReactNode
-}> = ({ children }) => <div className="DefaultLayout h-full">{children}</div>
+  className?: string
+}> = ({ children, className = '' }) => (
+  <div className={`DefaultLayout h-full ${className}`}>{children}</div>
+)
 
 export default DefaultLayout
