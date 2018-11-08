@@ -15,21 +15,37 @@ type QueryValue = string | number
 
 type Query = [QueryKey, QueryFilters, QueryValue]
 
+interface Options {
+  where?: Array<Query>
+  limit?: number | null
+  orderBy?: string
+}
+
 export const useFirestore = (
   collection: CollectionReference,
-  queries?: Array<Query>,
+  options: Options,
 ): any => {
   const [data, setData] = useState<any>([])
   const [fetching, setFetching] = useState<boolean>(true)
   const ref = useMemo(
     () => {
-      if (queries) {
-        queries.forEach((query: Query) => collection.where(...query))
+      let colRef = collection
+
+      if (options.where) {
+        options.where.forEach((query: Query) => {
+          colRef = colRef.where(...query) as CollectionReference
+        })
       }
 
-      return collection
+      if (options.orderBy) {
+        colRef = colRef.orderBy(options.orderBy) as CollectionReference
+      }
+
+      colRef = colRef.limit(options.limit || 25) as CollectionReference
+
+      return colRef
     },
-    [queries, collection],
+    [options, collection],
   )
 
   useEffect(() => {

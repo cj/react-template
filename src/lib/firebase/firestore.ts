@@ -4,11 +4,9 @@ require('firebase/firestore')
 
 const firestore = firebase.firestore()
 
-const settings = {
+firestore.settings({
   timestampsInSnapshots: true,
-}
-
-firestore.settings(settings)
+})
 
 // https://firebase.google.com/docs/firestore/manage-data/enable-offline
 firebase

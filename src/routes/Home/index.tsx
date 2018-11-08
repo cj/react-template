@@ -7,7 +7,9 @@ import { useInput, useFirestore } from '~/hooks'
 
 const HomeRoute: React.SFC<RouteComponentProps> = () => {
   const [todoInput, setTodoInput] = useInput('')
-  const [todos, todosMutation] = useFirestore(firestore.collection('todos'))
+  const [todos, todosMutation] = useFirestore(firestore.collection('todos'), {
+    limit: 5,
+  })
 
   const addTodo = useCallback(
     () => {
