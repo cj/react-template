@@ -6,6 +6,7 @@ node_modules
 /dist
 /build
 tags*
+functions/lib
 
 # allow these files/folders
 !.gitignore

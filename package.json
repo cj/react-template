@@ -48,6 +48,7 @@
     "not op_mini all"
   ],
   "dependencies": {
+    "@firebase/auth-types": "^0.3.4",
     "@firebase/firestore-types": "^0.7.0",
     "@reach/router": "^1.2.1",
     "firebase": "^5.5.7",

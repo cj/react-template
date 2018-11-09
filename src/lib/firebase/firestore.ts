@@ -1,4 +1,5 @@
 import firebase from '.'
+import './auth'
 
 require('firebase/firestore')
 
@@ -7,6 +8,8 @@ const firestore = firebase.firestore()
 firestore.settings({
   timestampsInSnapshots: true,
 })
+
+firebase.auth()
 
 // https://firebase.google.com/docs/firestore/manage-data/enable-offline
 firebase

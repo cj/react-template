@@ -4,6 +4,7 @@ import firestore from '~/lib/firebase/firestore'
 import Layout from '~/layouts/Default'
 import { QuerySnapshot, DocumentChange } from '@firebase/firestore-types'
 import { useInput, useFirestore } from '~/hooks'
+import { signIn } from '~/lib/firebase/auth'
 
 const HomeRoute: React.SFC<RouteComponentProps> = () => {
   const [todoInput, setTodoInput] = useInput('')
@@ -25,6 +26,14 @@ const HomeRoute: React.SFC<RouteComponentProps> = () => {
 
   return (
     <Layout className="m-5">
+      <button
+        type="submit"
+        className="p-1 border border-grey bg-grey"
+        onClick={() => signIn('google')}
+      >
+        Sign-In
+      </button>
+
       <button
         type="submit"
         className="p-1 border border-grey bg-grey"

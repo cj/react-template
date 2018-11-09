@@ -168,7 +168,8 @@ export const useFirestore = (
     empty,
     ref,
   }
-  const mutation = { add, remove }
+
+  const mutation = { add, remove, update }
 
   return [state, mutation]
 }
