@@ -7,13 +7,14 @@ import { useInput, useFirestore } from '~/hooks'
 
 const HomeRoute: React.SFC<RouteComponentProps> = () => {
   const [todoInput, setTodoInput] = useInput('')
-  const [todos, todosMutation] = useFirestore(firestore.collection('todos'), {
-    limit: 5,
+
+  const [todos, todosMutation] = useFirestore('todos', {
+    orderBy: ['createdAt', 'desc'],
   })
 
   const addTodo = useCallback(
     () => {
-      todos.ref.add({
+      todosMutation.add({
         content: todoInput.value,
       })
 
@@ -38,8 +39,20 @@ const HomeRoute: React.SFC<RouteComponentProps> = () => {
       <ul>
         {!todos.fetching
           && todos.data.map((todo: any) => (
-            <li key={todo.id}>
-              {todo.content} : {todo.id}
+            <li
+              className="flex flex-row content-center items-center mt-2"
+              key={todo.id}
+            >
+              <div>
+                {todo.content} : {todo.id}
+              </div>
+              <button
+                onClick={() => todosMutation.delete(todo)}
+                type="submit"
+                className="p-1 ml-2 bg-err text-white"
+              >
+                x
+              </button>
             </li>
           ))}
       </ul>

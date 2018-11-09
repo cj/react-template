@@ -8,106 +8,157 @@ import {
 import React, {
   useCallback, useState, useEffect, useMemo,
 } from 'react'
+import firebase from '~/lib/firebase'
+import firestore from '~/lib/firebase/firestore'
 
 type QueryKey = string | FieldPath
 type QueryFilters = WhereFilterOp
-type QueryValue = string | number
+type QueryValue = string | number | null
 
 type Query = [QueryKey, QueryFilters, QueryValue]
 
+type OrderByDirection = 'asc' | 'desc' | undefined
+type OrderByArray = [string, OrderByDirection]
+
+type OrderBy = string | OrderByArray | Array<any>
+type Where = Array<any> | Query
+
 interface Options {
-  where?: Array<Query>
-  limit?: number | null
-  orderBy?: string
+  where?: Where
+  limit?: number | undefined
+  orderBy?: OrderBy
 }
 
 export const useFirestore = (
-  collection: CollectionReference,
-  options: Options,
+  collection: CollectionReference | string,
+  options: Options = {},
 ): any => {
   const [data, setData] = useState<any>([])
   const [fetching, setFetching] = useState<boolean>(true)
   const ref = useMemo(
-    () => {
-      let colRef = collection
-
-      if (options.where) {
-        options.where.forEach((query: Query) => {
-          colRef = colRef.where(...query) as CollectionReference
-        })
-      }
-
-      if (options.orderBy) {
-        colRef = colRef.orderBy(options.orderBy) as CollectionReference
-      }
-
-      colRef = colRef.limit(options.limit || 25) as CollectionReference
-
-      return colRef
-    },
+    () => (typeof collection === 'string'
+      ? firestore.collection(collection)
+      : collection) as CollectionReference,
     [options, collection],
   )
 
-  useEffect(() => {
-    const unsubscribe = ref.onSnapshot((doc: QuerySnapshot) => {
-      if (doc.empty) return
-
-      doc.docChanges().forEach((snapshot: DocumentChange) => {
-        const id = snapshot.doc.id // eslint-disable-line prefer-destructuring
-        const docData = Object.assign({ id }, snapshot.doc.data(), snapshot.doc)
-
-        switch (snapshot.type) {
-          case 'added':
-            setData((prevData: ReadonlyArray<any>) => {
-              const newData = [...prevData]
-
-              newData.splice(
-                snapshot.newIndex,
-                0,
-                Object.assign({}, docData, snapshot.doc),
-              )
-
-              return newData
-            })
-            break
-          case 'modified':
-            setData((prevData: ReadonlyArray<any>) => {
-              const newData = [...prevData]
-
-              if (snapshot.oldIndex !== snapshot.newIndex) {
-                newData.splice(snapshot.oldIndex, 1)
-                newData.splice(snapshot.newIndex, 0, docData)
-              } else {
-                newData.splice(snapshot.newIndex, 1, docData)
-              }
-
-              return newData
-            })
-            break
-          case 'removed':
-            setData((prevData: ReadonlyArray<any>) => {
-              const newData = [...prevData]
-
-              newData.splice(snapshot.oldIndex, 1)
-
-              return newData
-            })
-            break
-          default:
-            break
-        }
+  const add = useCallback(
+    (newData: object) => {
+      ref.add({
+        ...newData,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        deletedAt: null,
       })
+    },
+    [ref],
+  )
 
-      setFetching(false)
-    })
+  const remove = useCallback(
+    (doc: any) => {
+      if (data.length === 1 && doc.id === data[0].id) {
+        setData([])
+      }
+      doc.ref.delete()
+    },
+    [ref],
+  )
+
+  useEffect(() => {
+    let filterRef = ref
+
+    if (options.where) {
+      const where: any = Array.isArray(options.where[0])
+        ? options.where
+        : [options.where]
+
+      where.forEach((query: Query) => {
+        filterRef = filterRef.where(...query) as CollectionReference
+      })
+    }
+
+    if (options.orderBy) {
+      const orderBy: any = Array.isArray(options.orderBy[0])
+        ? options.orderBy
+        : [options.orderBy]
+
+      orderBy.forEach((ob: OrderByArray) => {
+        filterRef = filterRef.orderBy(...ob) as CollectionReference
+      })
+    }
+
+    const unsubscribe = filterRef
+      .limit(options.limit || 25)
+      .onSnapshot((doc: QuerySnapshot) => {
+        if (doc.empty) return
+
+        doc.docChanges().forEach((snapshot: DocumentChange) => {
+          const id = snapshot.doc.id // eslint-disable-line prefer-destructuring
+          const docData = Object.assign({}, snapshot.doc.data(), {
+            id,
+            ref: snapshot.doc.ref,
+            metadata: snapshot.doc.metadata,
+          })
+
+          console.log(snapshot)
+
+          switch (snapshot.type) {
+            case 'added':
+              setData((prevData: ReadonlyArray<any>) => {
+                const newData = [...prevData]
+
+                newData.splice(
+                  snapshot.newIndex,
+                  0,
+                  Object.assign({}, docData, snapshot.doc),
+                )
+
+                return newData
+              })
+              break
+            case 'modified':
+              setData((prevData: ReadonlyArray<any>) => {
+                const newData = [...prevData]
+
+                if (snapshot.oldIndex !== snapshot.newIndex) {
+                  newData.splice(snapshot.oldIndex, 1)
+                  newData.splice(snapshot.newIndex, 0, docData)
+                } else {
+                  newData.splice(snapshot.newIndex, 1, docData)
+                }
+
+                return newData
+              })
+              break
+            case 'removed':
+              setData((prevData: ReadonlyArray<any>) => {
+                const newData = [...prevData]
+
+                console.log(newData)
+                if (newData.length >= 1) {
+                  newData.splice(snapshot.oldIndex, 1)
+                } else {
+                  newData.pop()
+                }
+
+                return newData
+              })
+              break
+            default:
+              break
+          }
+        })
+
+        setFetching(false)
+      })
 
     return () => unsubscribe
   }, [])
 
   const state = { data, fetching, ref }
-  const mutations = {}
+  const mutation = { add, delete: remove }
 
-  return [state, mutations]
+  return [state, mutation]
 }
 
 export default useFirestore
