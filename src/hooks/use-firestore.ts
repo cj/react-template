@@ -42,13 +42,24 @@ export const useFirestore = (
     [options, collection],
   )
 
+  const empty = useMemo(() => !fetching && data.length === 0, [data, fetching])
+
   const add = useCallback(
     (newData: object) => {
       ref.add({
         ...newData,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        deletedAt: null,
+      })
+    },
+    [ref],
+  )
+
+  const update = useCallback(
+    (doc: any, newData: object) => {
+      doc.ref.update({
+        ...newData,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       })
     },
     [ref],
@@ -90,7 +101,10 @@ export const useFirestore = (
     const unsubscribe = filterRef
       .limit(options.limit || 25)
       .onSnapshot((doc: QuerySnapshot) => {
-        if (doc.empty) return
+        if (doc.empty) {
+          setFetching(false)
+          return
+        }
 
         doc.docChanges().forEach((snapshot: DocumentChange) => {
           const id = snapshot.doc.id // eslint-disable-line prefer-destructuring
@@ -99,8 +113,6 @@ export const useFirestore = (
             ref: snapshot.doc.ref,
             metadata: snapshot.doc.metadata,
           })
-
-          console.log(snapshot)
 
           switch (snapshot.type) {
             case 'added':
@@ -134,12 +146,7 @@ export const useFirestore = (
               setData((prevData: ReadonlyArray<any>) => {
                 const newData = [...prevData]
 
-                console.log(newData)
-                if (newData.length >= 1) {
-                  newData.splice(snapshot.oldIndex, 1)
-                } else {
-                  newData.pop()
-                }
+                newData.splice(snapshot.oldIndex, 1)
 
                 return newData
               })
@@ -155,8 +162,13 @@ export const useFirestore = (
     return () => unsubscribe
   }, [])
 
-  const state = { data, fetching, ref }
-  const mutation = { add, delete: remove }
+  const state = {
+    data,
+    fetching,
+    empty,
+    ref,
+  }
+  const mutation = { add, remove }
 
   return [state, mutation]
 }

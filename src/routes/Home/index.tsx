@@ -36,6 +36,9 @@ const HomeRoute: React.SFC<RouteComponentProps> = () => {
       <input className="p-1 border border-grey" type="text" {...todoInput} />
 
       <h1 className="mt-2 mb-2">Todos</h1>
+
+      {todos.empty && <div>Empty!</div>}
+
       <ul>
         {!todos.fetching
           && todos.data.map((todo: any) => (
@@ -47,7 +50,7 @@ const HomeRoute: React.SFC<RouteComponentProps> = () => {
                 {todo.content} : {todo.id}
               </div>
               <button
-                onClick={() => todosMutation.delete(todo)}
+                onClick={() => todosMutation.remove(todo)}
                 type="submit"
                 className="p-1 ml-2 bg-err text-white"
               >
